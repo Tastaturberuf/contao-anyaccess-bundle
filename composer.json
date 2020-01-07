@@ -1,0 +1,23 @@
+{
+    "name": "tastaturberuf/contao-anyaccess-bundle",
+    "type": "contao-bundle",
+    "license": "LGPL3",
+    "authors": [
+        {
+            "name": "Daniel Jahnsmüller",
+            "email": "code@tastaturberuf.de"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Tastaturberuf\\AnyAccessBundle\\": "src/"
+        }
+    },
+    "require": {
+        "php": "^7.1",
+        "contao/core-bundle": "^4.4"
+    },
+    "extra": {
+        "contao-manager-plugin": "Tastaturberuf\\AnyAccessBundle\\Contao\\Manager\\Plugin"
+    }
+}
