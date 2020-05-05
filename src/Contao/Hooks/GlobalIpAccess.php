@@ -108,12 +108,11 @@ class GlobalIpAccess
 
     protected function blockClient()
     {
-        System::log("Blocked access for '".Environment::get('remoteAddr')."'", __METHOD__, TL_ERROR);
+        $text = sprintf("Blocked access for '%s'", Environment::get('remoteAddr'));
 
-        // show error page
-        /** @var PageError403 $objPage */
-        $objPage = new $GLOBALS['TL_PTY']['error_403']();
-        $objPage->generate(Frontend::getPageIdFromUrl());
+        System::log($text, __METHOD__, TL_ERROR);
+
+        die($text);
     }
 
 }
