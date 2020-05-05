@@ -106,11 +106,11 @@ class GlobalIpAccess
 
     protected function blockClient()
     {
-        $text = sprintf("Blocked access for '%s'", Environment::get('remoteAddr'));
+        $msg = sprintf("Blocked access for '%s'", Environment::get('remoteAddr'));
 
-        System::log($text, __METHOD__, TL_ERROR);
+        System::log($msg, __METHOD__, TL_ERROR);
 
-        die($text);
+        die($msg);
     }
 
 }

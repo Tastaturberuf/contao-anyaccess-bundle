@@ -58,7 +58,7 @@ class Anyaccess
 
         if ( $this->validateIp($strIp) )
         {
-            $oldIp = long2ip($objHostname->ip);
+            $oldIp = long2ip((int) $objHostname->ip);
 
             if ( $objHostname->ip != ip2long($strIp) )
             {

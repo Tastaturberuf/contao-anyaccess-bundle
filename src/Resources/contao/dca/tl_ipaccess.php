@@ -51,7 +51,7 @@ $GLOBALS['TL_DCA']['tl_ipaccess'] =
             'label_callback' => function($row, $label, DataContainer $dc, $args)
             {
                 $args[0] = Date::parse(Config::get('datimFormat'), $args[0]);
-                $args[1] = long2ip($args[1]);
+                $args[1] = long2ip((int) $args[1]);
 
                 return $args;
             }
@@ -151,7 +151,7 @@ $GLOBALS['TL_DCA']['tl_ipaccess'] =
             ],
             'load_callback' => [function($value)
             {
-                return long2ip($value);
+                return long2ip((int) $value);
             }],
             'save_callback' => [function($value)
             {
@@ -167,6 +167,7 @@ $GLOBALS['TL_DCA']['tl_ipaccess'] =
             'eval'      =>
             [
                 'maxlength' => 128,
+                'tl_class'  => 'clr long'
             ],
             'sql' => "varchar(128) NOT NULL default ''"
         ]
