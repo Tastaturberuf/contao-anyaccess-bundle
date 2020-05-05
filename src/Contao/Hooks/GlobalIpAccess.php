@@ -18,8 +18,6 @@ use Contao\Config;
 use Contao\Controller;
 use Contao\Database;
 use Contao\Environment;
-use Contao\Frontend;
-use Contao\PageError403;
 use Contao\System;
 use Tastaturberuf\AnyAccessBundle\Contao\Models\AnyaccessHostModel;
 use Tastaturberuf\AnyAccessBundle\Contao\Models\AnyaccessSessionModel;
@@ -30,17 +28,17 @@ class GlobalIpAccess
 
     function initializeSystem()
     {
-        // return if ip access is not enabled or script runs on cli
-        if ( !Config::get('enableGlobalIpAccess') || PHP_SAPI === 'cli' )
+        // get remote ip
+        $ip = Environment::get('remoteAddr');
+
+        // return if ip access is not enabled or script runs on cli or on localhost
+        if ( !Config::get('enableGlobalIpAccess') || PHP_SAPI === 'cli' || in_array($ip, ['127.0.0.1', '::1']) )
         {
             return;
         }
 
 
         $this->clearDatabase();
-
-        // get remote ip
-        $ip = Environment::get('remoteAddr');
 
         // count ip in database
         $result = AnyaccessHostModel::countBy('ip', ip2long($ip));
