@@ -45,7 +45,7 @@ class LoadPageDetailsListener
         $ip = Environment::get('remoteAddr');
 
         // return if ip access is not enabled or script runs on cli or on localhost
-        if ( !$rootPage->anyaccess_enable || PHP_SAPI === 'cli' /* || in_array($ip, ['127.0.0.1', '::1']) */)
+        if ( !$rootPage->anyaccess_enable || PHP_SAPI === 'cli' || in_array($ip, ['127.0.0.1', '::1']) )
         {
             return;
         }
