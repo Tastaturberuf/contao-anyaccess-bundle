@@ -22,9 +22,6 @@ use Contao\Model;
  * @package Tastaturberuf\AnyAccess\Models
  * @deprecated use AnyAccessHostModel instead
  */
-class IpAccessModel extends Model
+class IpAccessModel extends AnyaccessHostModel
 {
-
-    protected static $strTable = 'tl_ipaccess';
-
 }

@@ -20,6 +20,8 @@ use Contao\Model;
 class AnyaccessSessionModel extends Model
 {
 
-    public static $strTable = 'tl_anyaccess_session';
+    public const TABLE = 'tl_anyaccess_session';
+
+    public static $strTable = self::TABLE;
 
 }

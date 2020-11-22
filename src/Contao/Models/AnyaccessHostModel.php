@@ -20,6 +20,8 @@ use Contao\Model;
 class AnyaccessHostModel extends Model
 {
 
-    public static $strTable = 'tl_ipaccess';
+    public const TABLE = 'tl_ipaccess';
+
+    public static $strTable = self::TABLE;
 
 }

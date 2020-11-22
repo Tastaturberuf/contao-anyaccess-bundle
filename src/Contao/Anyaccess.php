@@ -15,6 +15,7 @@ namespace Tastaturberuf\AnyAccessBundle\Contao;
 
 
 use Contao\Controller;
+use Contao\CoreBundle\ServiceAnnotation\CronJob;
 use Contao\System;
 use Tastaturberuf\AnyAccessBundle\Contao\Models\AnyaccessHostModel;
 
@@ -22,6 +23,9 @@ use Tastaturberuf\AnyAccessBundle\Contao\Models\AnyaccessHostModel;
 class Anyaccess
 {
 
+    /**
+     * @CronJob("minutely")
+     */
     public function updateAllIps()
     {
         $objHostnames = AnyaccessHostModel::findAll();

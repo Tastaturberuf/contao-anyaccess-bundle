@@ -1,0 +1,9 @@
+services:
+
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Tastaturberuf\AnyAccessBundle\Contao\DataContainer\PageDataContainer: ~
+    Tastaturberuf\AnyAccessBundle\EventListener\LoadPageDetailsListener: ~
+    Tastaturberuf\AnyAccessBundle\Contao\Anyaccess: ~

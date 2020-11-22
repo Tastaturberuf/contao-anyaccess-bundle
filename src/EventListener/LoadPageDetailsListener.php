@@ -11,34 +11,47 @@
 declare(strict_types=1);
 
 
-namespace Tastaturberuf\AnyAccessBundle\Contao\Hooks;
+namespace Tastaturberuf\AnyAccessBundle\EventListener;
 
 
 use Contao\Config;
 use Contao\Controller;
+use Contao\CoreBundle\ServiceAnnotation\Hook;
 use Contao\Database;
 use Contao\Environment;
+use Contao\PageModel;
 use Contao\System;
 use Tastaturberuf\AnyAccessBundle\Contao\Models\AnyaccessHostModel;
 use Tastaturberuf\AnyAccessBundle\Contao\Models\AnyaccessSessionModel;
 
 
-class GlobalIpAccess
+/**
+ * @Hook("loadPageDetails")
+ */
+class LoadPageDetailsListener
 {
 
-    function initializeSystem()
+    public function __invoke(array $parentModels, PageModel $page): void
     {
+        // return if there is no root page
+        if ( 0 === count($parentModels) )
+        {
+            return;
+        }
+
+        $rootPage = end($parentModels);
+
         // get remote ip
         $ip = Environment::get('remoteAddr');
 
         // return if ip access is not enabled or script runs on cli or on localhost
-        if ( !Config::get('enableGlobalIpAccess') || PHP_SAPI === 'cli' || in_array($ip, ['127.0.0.1', '::1']) )
+        if ( !$rootPage->anyaccess_enable || PHP_SAPI === 'cli' /* || in_array($ip, ['127.0.0.1', '::1']) */)
         {
             return;
         }
 
 
-        $this->clearDatabase();
+        $this->clearDatabase((int) $rootPage->anyaccess_cookie_lifetime);
 
         // count ip in database
         $result = AnyaccessHostModel::countBy('ip', ip2long($ip));
@@ -46,9 +59,9 @@ class GlobalIpAccess
 
         if ( $result )
         {
-            if ( Config::get('enableCookieSupport') )
+            if ( $rootPage->anyaccess_cookie_support )
             {
-                $this->saveSession();
+                $this->saveSession((int) $rootPage->anyaccess_cookie_lifetime);
             }
 
             return;
@@ -60,7 +73,7 @@ class GlobalIpAccess
                 // look for valid session
                 $result = Database::getInstance()
                     ->prepare("SELECT * FROM tl_anyaccess_session WHERE session=? AND tstamp>=?")
-                    ->execute($_COOKIE['anyAccess'], time() - Config::get('cookieSessionTime'));
+                    ->execute($_COOKIE['anyAccess'], time() - $rootPage->anyaccess_cookie_lifetime);
 
                 if ( $result->numRows )
                 {
@@ -73,23 +86,23 @@ class GlobalIpAccess
     }
 
 
-    protected function clearDatabase()
+    protected function clearDatabase(int $cookieLifetime): void
     {
         Database::getInstance()
             ->prepare("DELETE FROM tl_anyaccess_session WHERE tstamp<?")
-            ->execute(time() - Config::get("cookieSessionTime"));
+            ->execute(time() - $cookieLifetime);
     }
 
 
-    protected function setCookie()
+    protected function setCookie(int $cookieLifetime): void
     {
-        Controller::setCookie('anyAccess', session_id(), time() + Config::get('cookieSessionTime'), '/');
+        Controller::setCookie('anyAccess', session_id(), time() + $cookieLifetime, '/');
     }
 
 
-    protected function saveSession()
+    protected function saveSession(int $cookieLifetime): void
     {
-        $this->setCookie();
+        $this->setCookie($cookieLifetime);
 
         if ( ($model = AnyaccessSessionModel::findOneBy('session', session_id())) === null )
         {
