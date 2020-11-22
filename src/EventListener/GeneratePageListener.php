@@ -19,27 +19,23 @@ use Contao\Controller;
 use Contao\CoreBundle\ServiceAnnotation\Hook;
 use Contao\Database;
 use Contao\Environment;
+use Contao\LayoutModel;
 use Contao\PageModel;
+use Contao\PageRegular;
 use Contao\System;
 use Tastaturberuf\AnyAccessBundle\Contao\Models\AnyaccessHostModel;
 use Tastaturberuf\AnyAccessBundle\Contao\Models\AnyaccessSessionModel;
 
 
 /**
- * @Hook("loadPageDetails")
+ * @Hook("generatePage")
  */
-class LoadPageDetailsListener
+class GeneratePageListener
 {
 
-    public function __invoke(array $parentModels, PageModel $page): void
+    public function __invoke(PageModel $pageModel, LayoutModel $layout, PageRegular $pageRegular): void
     {
-        // return if there is no root page
-        if ( 0 === count($parentModels) )
-        {
-            return;
-        }
-
-        $rootPage = end($parentModels);
+        $rootPage = PageModel::findByPk($pageModel->rootId);
 
         // get remote ip
         $ip = Environment::get('remoteAddr');

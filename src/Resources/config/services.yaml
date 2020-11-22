@@ -5,5 +5,5 @@ services:
         autoconfigure: true
 
     Tastaturberuf\AnyAccessBundle\Contao\DataContainer\PageDataContainer: ~
-    Tastaturberuf\AnyAccessBundle\EventListener\LoadPageDetailsListener: ~
+    Tastaturberuf\AnyAccessBundle\EventListener\GeneratePageListener: ~
     Tastaturberuf\AnyAccessBundle\Contao\Anyaccess: ~

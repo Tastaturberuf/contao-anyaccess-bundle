@@ -45,9 +45,9 @@ use Tastaturberuf\AnyAccessBundle\Contao\Models\AnyaccessSessionModel;
  * have to be set. Take a look at the system/modules/core/config/config.php
  * file to see how back end modules are configured.
  */
-$GLOBALS['BE_MOD']['system']['ipaccess'] =
+$GLOBALS['BE_MOD']['system']['anyaccess'] =
 [
-    'tables' => ['tl_ipaccess'],
+    'tables' => [AnyaccessHostModel::TABLE],
     'update' => [Anyaccess::class, 'updateAllIps'],
     'icon'   => 'logout.gif'
 ];
